@@ -6,17 +6,29 @@
 <title>Angry Turds 💩</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { background: #87CEEB; display: flex; flex-direction: column; align-items: center; font-family: 'Comic Sans MS', cursive, sans-serif; overflow: hidden; }
-#header { display: flex; align-items: center; justify-content: space-between; width: 960px; padding: 10px 20px; background: #8B4513; color: #FFD700; border-bottom: 4px solid #5C3317; }
-#header h1 { font-size: 28px; text-shadow: 2px 2px #000; }
-#score-display { font-size: 22px; text-shadow: 1px 1px #000; }
-#level-display { font-size: 18px; text-shadow: 1px 1px #000; }
-canvas { border: 3px solid #5C3317; cursor: crosshair; }
+body { background: #87CEEB; display: flex; flex-direction: column; align-items: center; font-family: 'Comic Sans MS', cursive, sans-serif; overflow-x: hidden; min-height: 100vh; }
+#header { display: flex; align-items: center; justify-content: space-between; width: 100%; max-width: 960px; padding: 10px 20px; background: #8B4513; color: #FFD700; border-bottom: 4px solid #5C3317; flex-wrap: wrap; gap: 4px; }
+#header h1 { font-size: clamp(16px, 4vw, 28px); text-shadow: 2px 2px #000; white-space: nowrap; }
+#score-display { font-size: clamp(14px, 3vw, 22px); text-shadow: 1px 1px #000; }
+#level-display { font-size: clamp(12px, 2.5vw, 18px); text-shadow: 1px 1px #000; }
+#game-wrapper { width: 100%; max-width: 960px; position: relative; }
+canvas { width: 100%; height: auto; display: block; border: 3px solid #5C3317; cursor: crosshair; touch-action: none; }
 #controls { margin-top: 10px; display: flex; gap: 15px; }
-button { padding: 10px 20px; font-size: 16px; font-family: 'Comic Sans MS', cursive; background: #8B4513; color: #FFD700; border: 2px solid #5C3317; cursor: pointer; border-radius: 8px; text-shadow: 1px 1px #000; }
+button { padding: 12px 24px; font-size: clamp(14px, 3vw, 16px); font-family: 'Comic Sans MS', cursive; background: #8B4513; color: #FFD700; border: 2px solid #5C3317; cursor: pointer; border-radius: 8px; text-shadow: 1px 1px #000; -webkit-tap-highlight-color: transparent; }
 button:hover { background: #A0522D; }
-#message { font-size: 36px; color: #FFD700; text-shadow: 3px 3px #000; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: none; z-index: 10; pointer-events: none; background: rgba(0,0,0,0.6); padding: 20px 40px; border-radius: 12px; }
-#ammo-display { font-size: 16px; text-shadow: 1px 1px #000; color: #FFD700; }
+#message { font-size: clamp(20px, 5vw, 36px); color: #FFD700; text-shadow: 3px 3px #000; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: none; z-index: 10; pointer-events: none; background: rgba(0,0,0,0.6); padding: 15px 25px; border-radius: 12px; text-align: center; max-width: 90%; }
+#ammo-display { font-size: clamp(12px, 2.5vw, 16px); text-shadow: 1px 1px #000; color: #FFD700; }
+
+/* Mobile tweaks */
+@media (max-width: 600px) {
+  #header { padding: 6px 10px; }
+  #header h1 { font-size: 14px; }
+  #controls { gap: 10px; }
+  button { padding: 14px 20px; min-height: 48px; }
+}
+@media (hover: none) {
+  canvas { cursor: default; }
+}
 </style>
 </head>
 <body>
@@ -26,12 +38,15 @@ button:hover { background: #A0522D; }
   <div id="ammo-display">Ammo: 💩💩💩</div>
   <div id="score-display">Score: 0</div>
 </div>
-<canvas id="game" width="960" height="540"></canvas>
+<div id="game-wrapper">
+  <canvas id="game" width="960" height="540"></canvas>
+  <div id="message"></div>
+</div>
 <div id="controls">
   <button onclick="game.restart()">Restart Level</button>
   <button onclick="game.nextLevel()">Next Level</button>
 </div>
-<div id="message"></div>
+
 
 <script>
 const canvas = document.getElementById('game');
